@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.auth import get_user_model
 from django.db import models
 
-from operator import attrgetter
+from django.db.models import Max, Sum
 
 
 class Attribute(models.Model):
@@ -40,23 +41,22 @@ class Advantage(models.Model):
     cost = models.IntegerField(blank=False, null=False)
     description = models.TextField(blank=True)
     conditions = models.ManyToManyField(
-        'Attribute', blank=True, through='AttributeAdvantage', related_name='advantages'
+        'Attribute', blank=True, through='AttributeAdvantage', related_name='advantages', symmetrical=False
     )
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.tier = max(self.objects.conditions, key=attrgetter('tier'))
-        self.cost = sum(self.objects.conditions, key=attrgetter('cost'))
+        if self.conditions.all().aggregate(Max('tier'))['tier__max'] is not None:
+            self.tier = self.conditions.all().aggregate(Max('tier'))['tier__max']
+        else:
+            self.tier = 1
+        if self.conditions.all().aggregate(Sum('cost'))['cost__sum'] is not None:
+            self.cost = self.conditions.all().aggregate(Sum('cost'))['cost__sum']
+        else:
+            self.cost = 1
         super().save(*args, **kwargs)
-
-
-class AttributeAdvantage(models.Model):
-    attribute = models.ForeignKey(Attribute, related_name='advantage')
-    advantage = models.ForeignKey(Advantage, related_name='attribute')
-    mod = models.IntegerField(default=1)
-    max = models.IntegerField(default=0)
 
 
 class Label(models.Model):
@@ -65,3 +65,22 @@ class Label(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class AttributeAdvantage(models.Model):
+    attribute = models.ForeignKey(Attribute, related_name='advantage', null=True, blank=True)
+    advantage = models.ForeignKey(Advantage, related_name='attribute', null=True, blank=True)
+    mod = models.IntegerField(default=1)
+    max = models.IntegerField(default=0)
+    cost_limit = models.IntegerField(blank=True, null=True)
+    label_limit = models.ForeignKey(Label, related_name='advantage', null=True, blank=True)
+
+
+class Character(models.Model):
+    first_name = models.CharField(max_length=100, db_index=True)
+    last_name = models.CharField(max_length=100, db_index=True)
+    nickname = models.CharField(max_length=100, db_index=True)
+    owner = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, db_index=True, related_name='characters')
+    advantages = models.ManyToManyField('Advantage', blank=True, related_name='advantages_characters')
+    pc = models.IntegerField(default=50)
+    px = models.IntegerField(default=0)

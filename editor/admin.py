@@ -11,7 +11,8 @@ from .models import (
     AttributeDependency,
     Advantage,
     AttributeAdvantage,
-    Label
+    Label,
+    Character
 )
 
 
@@ -69,6 +70,16 @@ class LabelAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
+class CharactereAdmin(admin.ModelAdmin):
+    list_display = (
+        'first_name',
+        'last_name'
+    )
+    list_display_links = ('first_name',)
+    ordering = ('first_name',)
+
+
 admin.site.register(Attribute, AttributeAdmin)
 admin.site.register(Advantage, AdvantageAdmin)
 admin.site.register(Label, LabelAdmin)
+admin.site.register(Character, CharactereAdmin)
