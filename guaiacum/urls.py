@@ -15,8 +15,14 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.conf.urls import url
+from django.conf.urls import url, include
+from editor import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^editor/', views.editor, name='editor'),
+    url(r'^home/', views.home, name='home'),
+    url(r'^advantages/', views.advantages, name='advantages'),
+    url(r'^advantage/(?P<advantage_id>\d+)/$', views.advantage, name='advantage'),
+    url('^', include('django.contrib.auth.urls')),
 ]

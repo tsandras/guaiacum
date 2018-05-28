@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from django.forms import TextInput, Textarea
 from django.db import models
+from editor.pages.admin import PageAdmin, TopicAdmin
+from editor.pages.models import Page, Topic
 
 from .models import (
     Attribute,
@@ -39,7 +41,7 @@ class AttributeAdmin(admin.ModelAdmin):
     )
     list_display_links = ('name',)
     ordering = ('name',)
-    filter_horizontal = ('conditions',)
+    filter_horizontal = ('labels',)
     inlines = [AttributeDependencyInline, AttributeLevelInline]
 
 
@@ -56,9 +58,9 @@ class AdvantageAdmin(admin.ModelAdmin):
     )
     list_display_links = ('name',)
     ordering = ('name',)
-    filter_horizontal = ('conditions',)
     inlines = [AttributeAdvantageInline]
     readonly_fields = ['tier', 'cost']
+    filter_horizontal = ('conditions',)
 
 
 class LabelAdmin(admin.ModelAdmin):
@@ -76,6 +78,7 @@ class CharactereAdmin(admin.ModelAdmin):
         'last_name'
     )
     list_display_links = ('first_name',)
+    filter_horizontal = ('advantages',)
     ordering = ('first_name',)
 
 
@@ -83,3 +86,6 @@ admin.site.register(Attribute, AttributeAdmin)
 admin.site.register(Advantage, AdvantageAdmin)
 admin.site.register(Label, LabelAdmin)
 admin.site.register(Character, CharactereAdmin)
+
+admin.site.register(Page, PageAdmin)
+admin.site.register(Topic, TopicAdmin)

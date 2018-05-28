@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+It is now {{ current_date }}
+<br>
+<a href="{% url 'editor' %}">Create new charactere</a>
+<br>
+{% for character in characters %}
+    Character: {{ character.nickname }}
+{% endfor %}
+{% endblock content %}

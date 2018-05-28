@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<select id="add-advantages" style="width:260px"></select>
+<script>
+    var editor = new Editor('add-advantages')
+    editor.handleAddAdvantages()
+</script>
+{% endblock content %}

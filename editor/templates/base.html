@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+        <title>Site user | Django site user</title>
+        <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+        <link rel="stylesheet" type="text/css" href="/static/admin/css/dashboard.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.js"></script>
+        <script src="{% static "class_editor.js" %}"></script>
+
+    </head>
+
+    <body>
+        <div id="header">
+            <div id="branding">
+
+                <h1 id="site-name"><a href="/admin/">Django user</a></h1>
+
+            </div>
+
+            <div id="user-tools">
+
+                    Welcome,
+                    <strong>{{user}}</strong>.
+                    <a href="/">View site</a> /
+                    <a href="/admin/password_change/">Change password</a> /
+                    <a href="/admin/logout/">Log out</a>
+            </div>
+        </div>
+        {% block content %}{% endblock content %}
+    </body>
+</html>
