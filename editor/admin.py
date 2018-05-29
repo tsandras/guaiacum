@@ -14,7 +14,8 @@ from .models import (
     Advantage,
     AttributeAdvantage,
     Label,
-    Character
+    Character,
+    UserProfile
 )
 
 
@@ -82,6 +83,14 @@ class CharactereAdmin(admin.ModelAdmin):
     ordering = ('first_name',)
 
 
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'character'
+    )
+    ordering = ('user',)
+
+
 admin.site.register(Attribute, AttributeAdmin)
 admin.site.register(Advantage, AdvantageAdmin)
 admin.site.register(Label, LabelAdmin)
@@ -89,3 +98,5 @@ admin.site.register(Character, CharactereAdmin)
 
 admin.site.register(Page, PageAdmin)
 admin.site.register(Topic, TopicAdmin)
+
+admin.site.register(UserProfile, UserProfileAdmin)

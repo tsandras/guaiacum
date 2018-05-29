@@ -72,6 +72,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'guaiacum.wsgi.application'
 
 LOGIN_REDIRECT_URL = '/home/'
+LOGIN_URL = '/login/'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

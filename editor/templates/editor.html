@@ -2,8 +2,34 @@
 
 {% block content %}
 <select id="add-advantages" style="width:260px"></select>
+<div id="right-part" style="float: right;">
+    <div id="attributes" class="box">
+        <div class="box-head">
+            Attributs
+        </div>
+        <div id="attributes-body" class="box-body">
+        </div>
+    </div>
+    <div id="info" class="box">
+        <div class="box-head">
+            Info
+        </div>
+        <div id="info-body" class="box-body">
+            <input id="first_name" placeholder="prénom" name="first_name" style="width: 90%;"/>
+            <input id="last_name" placeholder="nom" name="last_name" style="width: 90%;"/>
+            <input id="nickname" placeholder="surnom" name="nickname" style="width: 90%;"/>
+            <input id="total_pc" placeholder="pc total" name="total_pc" style="width: 90%;"/>
+        </div>
+    </div>
+    <div id="save" class="box">
+        <div class="box-head">
+            SAUVEGARDER
+        </div>
+    </div>
+</div>
+<div id="advantages"></div>
 <script>
-    var editor = new Editor('add-advantages')
+    var editor = new Editor('add-advantages', 'http://localhost:8001')
     editor.handleAddAdvantages()
 </script>
 {% endblock content %}

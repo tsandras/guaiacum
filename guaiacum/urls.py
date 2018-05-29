@@ -16,6 +16,8 @@ Including another URLconf
 
 from django.contrib import admin
 from django.conf.urls import url, include
+from django.views.generic import TemplateView
+
 from editor import views
 
 urlpatterns = [
@@ -24,5 +26,7 @@ urlpatterns = [
     url(r'^home/', views.home, name='home'),
     url(r'^advantages/', views.advantages, name='advantages'),
     url(r'^advantage/(?P<advantage_id>\d+)/$', views.advantage, name='advantage'),
+    url(r'^save_character/', views.save_character, name='save_character'),
     url('^', include('django.contrib.auth.urls')),
+    url(r'^$',  TemplateView.as_view(template_name="about.html")),
 ]
