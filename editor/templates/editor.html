@@ -15,10 +15,10 @@
             Info
         </div>
         <div id="info-body" class="box-body">
-            <input id="first_name" placeholder="prénom" name="first_name" style="width: 90%;"/>
-            <input id="last_name" placeholder="nom" name="last_name" style="width: 90%;"/>
-            <input id="nickname" placeholder="surnom" name="nickname" style="width: 90%;"/>
-            <input id="total_pc" placeholder="pc total" name="total_pc" style="width: 90%;"/>
+            <input id="first_name" placeholder="prénom" name="first_name" value="{{ character.first_name }}" style="width: 90%;"/>
+            <input id="last_name" placeholder="nom" name="last_name" value="{{ character.last_name }}" style="width: 90%;"/>
+            <input id="nickname" placeholder="surnom" name="nickname" value="{{ character.nickname }}" style="width: 90%;"/>
+            <input id="total_pc" placeholder="pc total" name="total_pc" value="{{ character.total_pc }}" style="width: 90%;"/>
         </div>
     </div>
     <div id="save" class="box">
@@ -28,6 +28,18 @@
     </div>
 </div>
 <div id="advantages"></div>
+    {% for advantage in advantages %}
+        <div class="box">
+            <div class="box-head">
+                {{ advantage.name }}
+            </div>
+            <div class="box-body">
+                {% for attribute_advantage in advantage.attribute_advantages %}
+                    {{ attribute_advantage.attribute_name }} : {{ attribute_advantage.bonus }}<br>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
 <script>
     var editor = new Editor('add-advantages', 'http://localhost:8001')
     editor.handleAddAdvantages()

@@ -39,11 +39,15 @@ class AttributeAdmin(admin.ModelAdmin):
         'name',
         'tier',
         'cost',
+        'get_labels'
     )
     list_display_links = ('name',)
     ordering = ('name',)
     filter_horizontal = ('labels',)
     inlines = [AttributeDependencyInline, AttributeLevelInline]
+
+    def get_labels(self, obj):
+        return ", ".join([p.name for p in obj.labels.all()])
 
 
 class AttributeAdvantageInline(admin.StackedInline):

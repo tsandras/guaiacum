@@ -22,7 +22,8 @@ from editor import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^editor/', views.editor, name='editor'),
+    url(r'^editor_new/', views.editor_new, name='editor_new'),
+    url(r'^editor/(?P<character_id>\d+)/$', views.editor, name='editor'),
     url(r'^home/', views.home, name='home'),
     url(r'^advantages/', views.advantages, name='advantages'),
     url(r'^advantage/(?P<advantage_id>\d+)/$', views.advantage, name='advantage'),

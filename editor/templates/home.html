@@ -1,11 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-It is now {{ current_date }}
-<br>
-<a href="{% url 'editor' %}">Create new charactere</a>
-<br>
-{% for character in characters %}
-    Character: {{ character.nickname }}
-{% endfor %}
+<div id="right-part" style="float: right;">
+    <div id="characters" class="box">
+        <div class="box-head">
+            <a href="{% url 'editor' %}">Nouveau personnage</a>
+        </div>
+        <div id="characters-body" class="box-body">
+            {% for character in characters %}
+                <a href="/editor/{{ character.id }}">{{ character.first_name }} {{ character.last_name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div id="pages" class="box">
+    <div class="box-head">
+        Pages
+    </div>
+    <div id="pages-body" class="box-body">
+        {% for page in pages %}
+            {{ page.name }}
+        {% endfor %}
+    </div>
+</div>
 {% endblock content %}

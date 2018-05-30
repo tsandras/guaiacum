@@ -6,6 +6,7 @@ from django.template.loader import get_template
 import json
 
 from editor.models import Character, Advantage, AttributeAdvantage, Attribute
+from editor.pages.models import Page
 from guaiacum import settings
 
 
@@ -15,16 +16,36 @@ def home(request):
     logged_user = request.user
     t = get_template('home.html')
     characters = Character.objects.filter(owner=logged_user)
-    html = t.render({'characters': characters, 'user': logged_user})
+    pages = Page.objects.all()
+    html = t.render({'characters': characters, 'pages': pages, 'user': logged_user})
     return HttpResponse(html)
 
 
-def editor(request):
+def editor_new(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('editor.html')
     logged_user = request.user
-    html = t.render({'user': logged_user})
+    html = t.render({'user': logged_user    })
+    return HttpResponse(html)
+
+
+def editor(request, character_id):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    t = get_template('editor.html')
+    logged_user = request.user
+    if character_id:
+        character = Character.objects.get(id=character_id)
+        advantages = []
+        for advantage in character.advantages.all():
+            attributes_advantages = AttributeAdvantage.objects.filter(advantage_id=advantage.id)
+            aa = AttributeAdvantageSerializer(attributes_advantages, many=True).data
+            advantages.append({'name': advantage.name, 'attribute_advantages': aa})
+    else:
+        character = None
+        advantages = None
+    html = t.render({'user': logged_user, 'character': character, 'advantages': advantages})
     return HttpResponse(html)
 
 
