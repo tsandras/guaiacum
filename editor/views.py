@@ -43,7 +43,7 @@ def editor(request, character_id):
         for advantage in character.advantages.all():
             attributes_advantages = AttributeAdvantage.objects.filter(advantage_id=advantage.id)
             aa = AttributeAdvantageSerializer(attributes_advantages, many=True).data
-            advantages.append({'name': advantage.name, 'attribute_advantages': aa})
+            advantages.append({'name': advantage.name, 'id': advantage.id, 'attribute_advantages': aa})
     else:
         character = None
         advantages = None
@@ -100,6 +100,7 @@ def save_character(request):
         owner_id=user.id
     )
     for advantage_id in request.POST.getlist('advantages[]'):
+        print(Advantage.objects.get(id=advantage_id))
         character.advantages.add(Advantage.objects.get(id=advantage_id))
     return HttpResponse("Save !", content_type="text/plain")
 

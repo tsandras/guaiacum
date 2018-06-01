@@ -75,6 +75,7 @@ class Editor {
         var self = this
         var out = []
         for (var i = 0; i < self.advantages.length; i++) {
+            console.log(self.advantages[i])
             out.push(self.advantages[i].id)
         }
         return out
@@ -95,6 +96,16 @@ class Editor {
             });
         })
     }
+    fetchExistingAdvantages() {
+        var self = this
+        $('.advantage').each(function() {
+            console.log($(this))
+            var advantageName = $(this).children('.advantage-name').text()
+            var advantageId = $(this).children('.advantage-name').data('id')
+            var adv = {'id': advantageId, 'name': advantageName}
+            self.advantages.push(adv)
+        })
+    }
     constructor (idAddAdvantages, address) {
         this.idAddAdvantages = idAddAdvantages
         this.address = address
@@ -102,7 +113,9 @@ class Editor {
         this.attributes = {}
         this.createSelect2()
         this.handleSave()
+        this.fetchExistingAdvantages()
     }
+
     buildAdvantages() {
         var self = this
         $('#advantages').html('')
