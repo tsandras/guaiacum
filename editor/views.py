@@ -5,9 +5,11 @@ from rest_framework import serializers as rserializers
 from django.template.loader import get_template
 import json
 
-from editor.models import Character, Advantage, AttributeAdvantage, Attribute
+from editor.models import Character, Advantage, AttributeAdvantage, Attribute, UserProfile, Label
 from editor.pages.models import Page
 from guaiacum import settings
+
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 
 def home(request):
@@ -46,6 +48,37 @@ def editor(request, character_id):
         character = None
         advantages = None
     html = t.render({'user': logged_user, 'character': character, 'advantages': advantages})
+    return HttpResponse(html)
+
+
+@xframe_options_exempt
+def attributes_phy(request):
+    t = get_template('attribute.html')
+    lab = Label.objects.filter(name='Physique').first()
+    attributes = Attribute.objects.filter(labels__in=[lab])
+    html = t.render({'attributes': attributes})
+    return HttpResponse(html)
+
+
+@xframe_options_exempt
+def attributes_con(request):
+    t = get_template('attribute.html')
+    lab = Label.objects.filter(name='Connaissance').first()
+    attributes = Attribute.objects.filter(labels__in=[lab])
+    html = t.render({'attributes': attributes})
+    return HttpResponse(html)
+
+
+def page(request, page_id):
+    t = get_template('page.html')
+    page = Page.objects.get(id=page_id)
+    user = request.user
+    user_profile = UserProfile.objects.filter(user=user).first()
+    if user_profile is None or page is None:
+        return redirect('home')
+    character = user_profile.character
+    sections = character.get_sections_for(page)
+    html = t.render({'character': character, 'sections': sections, 'page': page})
     return HttpResponse(html)
 
 

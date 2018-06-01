@@ -39,6 +39,7 @@ class AttributeAdmin(admin.ModelAdmin):
         'name',
         'tier',
         'cost',
+        'get_levels',
         'get_labels'
     )
     list_display_links = ('name',)
@@ -48,6 +49,9 @@ class AttributeAdmin(admin.ModelAdmin):
 
     def get_labels(self, obj):
         return ", ".join([p.name for p in obj.labels.all()])
+
+    def get_levels(self, obj):
+        return ", ".join([str(p.level) for p in obj.levels.all().order_by('level')])
 
 
 class AttributeAdvantageInline(admin.StackedInline):

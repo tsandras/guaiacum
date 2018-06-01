@@ -19,7 +19,7 @@
     </div>
     <div id="pages-body" class="box-body">
         {% for page in pages %}
-            {{ page.name }}
+        <a href="/page/{{ page.id }}">{{ page.name }}</a>
         {% endfor %}
     </div>
 </div>

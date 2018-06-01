@@ -1,0 +1,12 @@
+<div style="font-family:Consolas,"Andale Mono WT","Andale Mono","Bitstream Vera Sans Mono","Nimbus Mono L",Monaco;">
+{% for attribute in attributes %}
+    <b>{{ attribute.name }}</b><br>
+    <p>{{ attribute.description }}</p>
+    {% for level in attribute.levels.all %}
+    <div style="font-size: 12px;">
+        <b>{{ level.level }}: {{ level.name }}</b>: {{ level.description }}
+    </div>
+    <br>
+    {% endfor %}
+{% endfor %}
+</div>

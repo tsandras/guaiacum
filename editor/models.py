@@ -31,6 +31,9 @@ class Attribute(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 
 class AttributeDependency(models.Model):
     condition = models.ForeignKey(Attribute, related_name='attribute')
@@ -43,6 +46,9 @@ class AttributeLevel(models.Model):
     name = models.CharField(max_length=100, unique=False)
     description = models.TextField(blank=True)
     level = models.IntegerField(blank=False, null=False)
+
+    class Meta:
+        ordering = ['level']
 
 
 class Advantage(models.Model):
@@ -83,6 +89,9 @@ class AttributeAdvantage(models.Model):
     cost_limit = models.IntegerField(blank=True, null=True)
     label_limit = models.ForeignKey(Label, related_name='advantage', null=True, blank=True)
 
+    def attribute_name(self):
+        return self.attribute.name
+
 
 class Character(models.Model):
     first_name = models.CharField(max_length=100, db_index=True)
@@ -91,6 +100,37 @@ class Character(models.Model):
     owner = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, db_index=True, related_name='characters')
     advantages = models.ManyToManyField(Advantage, blank=True, related_name='advantages_characters')
     total_pc = models.IntegerField(default=100)
+
+    def get_dict_of_attributes(self):
+        attributes = []
+        for advantage in self.advantages.all():
+            attributes_advantages = AttributeAdvantage.objects.filter(advantage_id=advantage.id)
+            for attribute_advantage in attributes_advantages:
+                attributes.append({
+                    'name': attribute_advantage.attribute_name,
+                     'bonus': attribute_advantage.bonus,
+                     'max': attribute_advantage.max
+
+                })
+        out = {}
+        for attribute in attributes:
+            if attribute['name'] not in out.keys():
+                out[attribute['name']] = attribute['bonus']
+            else:
+                out[attribute['name']] += attribute['bonus']
+        return out
+
+    def get_sections_for(self, page):
+        sections = []
+        attributes = self.get_dict_of_attributes()
+        for section in page.sections.all():
+            if section.attribute.name in attributes.keys():
+                if attributes[section.attribute.name] >= section.level:
+                    sections.append(section)
+        return sections
+
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name
 
 
 class UserProfile(models.Model):
