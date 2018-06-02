@@ -29,4 +29,4 @@ class Section(models.Model):
     attribute = models.ForeignKey(Attribute, blank=True, null=True, related_name='sections')
     level = models.IntegerField(default=1)
     quote = models.TextField(blank=True)
-    drawing = models.FileField(upload_to='media/drawing/sections/', storage=OverwriteStorage(), blank=True, null=True)
+    drawing = models.FileField(upload_to='media/drawing/sections/', blank=True, null=True)
