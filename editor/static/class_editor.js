@@ -49,6 +49,8 @@ class Attribute {
             $('#attributes-body').append('<div id="attr'+this.id+'"></div>')
             $('#attr'+this.id).append(this.name + ' : ' + this.total + ' (' + this.max + ')')
         }
+        this.total = 0
+        this.max = 0
     }
 }
 
@@ -75,7 +77,6 @@ class Editor {
         var self = this
         var out = []
         for (var i = 0; i < self.advantages.length; i++) {
-            console.log(self.advantages[i])
             out.push(self.advantages[i].id)
         }
         return out
@@ -99,12 +100,23 @@ class Editor {
     fetchExistingAdvantages() {
         var self = this
         $('.advantage').each(function() {
-            console.log($(this))
-            var advantageName = $(this).children('.advantage-name').text()
+            var advantageName = $(this).children('.advantage-name').text().trim()
             var advantageId = $(this).children('.advantage-name').data('id')
-            var adv = {'id': advantageId, 'name': advantageName}
+            var bonuses = []
+            $(this).find('.attribute').each(function() {
+                bonuses.push({
+                    'attribute_name': $(this).children('.attribute-name').text().trim(),
+                    'attribute': $(this).children('.attribute-name').data('id'),
+                    'bonus': $(this).children('.attribute-value').text(),
+                    'max': $(this).children('.attribute-max').text()
+                })
+            })
+            var adv = {'id': advantageId, 'name': advantageName, 'bonuses': bonuses}
             self.advantages.push(adv)
         })
+        for (var i = 0; i < self.advantages.length; i++) {
+            self.pushAttributesFromAdvantage(i, self.advantages[i])
+        }
     }
     constructor (idAddAdvantages, address) {
         this.idAddAdvantages = idAddAdvantages
@@ -115,7 +127,31 @@ class Editor {
         this.handleSave()
         this.fetchExistingAdvantages()
     }
+    pushAttributesFromAdvantage(index, advantage) {
+        var self = this
 
+        for (var j = 0; j < advantage.bonuses.length; j++) {
+            if (!(advantage.bonuses[j].attribute in self.attributes)) {
+                self.attributes[self.advantages[index].bonuses[j].attribute] = new Attribute(
+                    self.advantages[index].bonuses[j].attribute,
+                    self.advantages[index].bonuses[j].attribute_name,
+                    parseInt(self.advantages[index].bonuses[j].bonus),
+                    parseInt(self.advantages[index].bonuses[j].max),
+                )
+            } else {
+                self.attributes[self.advantages[index].bonuses[j].attribute].add(
+                    parseInt(self.advantages[index].bonuses[j].bonus),
+                    parseInt(self.advantages[index].bonuses[j].max)
+                )
+            }
+            self.attributes[self.advantages[index].bonuses[j].attribute].calculate()
+            self.attributes[self.advantages[index].bonuses[j].attribute].draw()
+            $('#a'+self.advantages[index].id+' .box-body').append(
+                '<span>' + self.advantages[index].bonuses[j].attribute_name + ': +' + self.advantages[index].bonuses[j].bonus +
+                '(' + self.advantages[index].bonuses[j].max + ')'
+                + '</span><br>')
+        }
+    }
     buildAdvantages() {
         var self = this
         $('#advantages').html('')
@@ -123,29 +159,8 @@ class Editor {
             $('#advantages').append('<div id="a'+self.advantages[i].id+'" class="box">')
             $('#a'+self.advantages[i].id).append('<div class="box-head">'+self.advantages[i].name + '</div>')
             $('#a'+self.advantages[i].id).append('<div class="box-body">')
-            for (var j = 0; j < self.advantages[i].bonuses.length; j++) {
-                if (!(self.advantages[i].bonuses[j].attribute in self.attributes)) {
-                    self.attributes[self.advantages[i].bonuses[j].attribute] = new Attribute(
-                        self.advantages[i].bonuses[j].attribute,
-                        self.advantages[i].bonuses[j].attribute_name,
-                        self.advantages[i].bonuses[j].bonus,
-                        self.advantages[i].bonuses[j].max,
-                    )
-                } else {
-                    self.attributes[self.advantages[i].bonuses[j].attribute].add(
-                        self.advantages[i].bonuses[j].bonus,
-                        self.advantages[i].bonuses[j].max
-                    )
-                }
-                self.attributes[self.advantages[i].bonuses[j].attribute].calculate()
-                self.attributes[self.advantages[i].bonuses[j].attribute].draw()
-                $('#a'+self.advantages[i].id+' .box-body').append(
-                    '<span>' + self.advantages[i].bonuses[j].attribute_name + ': +' + self.advantages[i].bonuses[j].bonus +
-                    '(' + self.advantages[i].bonuses[j].max + ')'
-                    + '</span><br>')
-            }
+            self.pushAttributesFromAdvantage(i, self.advantages[i])
             $('#a'+self.advantages[i].id).append('</div></div>')
-
         }
     }
     handleAddAdvantages () {
@@ -155,6 +170,7 @@ class Editor {
             if (selected.val() && selected.val() != 'undefined') {
                 $.get( self.address + '/advantage/' + selected.val() + '/', function( data ) {
                   self.advantages.push(data)
+                  self.attributes = {}
                   self.buildAdvantages()
                   $('#'+self.idAddAdvantages).val(null).trigger('change.select2')
                   self.createSelect2()

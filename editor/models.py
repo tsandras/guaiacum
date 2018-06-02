@@ -4,9 +4,7 @@ from __future__ import unicode_literals
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from django.contrib.auth.models import User
-
-from django.db.models import Max, Sum
+from django.db.models import Max
 
 
 class Label(models.Model):
@@ -99,7 +97,8 @@ class Character(models.Model):
     nickname = models.CharField(max_length=100, db_index=True)
     owner = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, db_index=True, related_name='characters')
     advantages = models.ManyToManyField(Advantage, blank=True, related_name='advantages_characters')
-    total_pc = models.IntegerField(default=100)
+    total_pc = models.IntegerField(default=300)
+    audio = models.FileField(upload_to='media/audio/characters/', blank=True, null=True)
 
     def get_dict_of_attributes(self):
         attributes = []

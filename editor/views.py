@@ -92,13 +92,15 @@ def save_character(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     user = request.user
-    character = Character.objects.create(
-        first_name=request.POST['first_name'],
-        last_name=request.POST['last_name'],
-        nickname=request.POST['nickname'],
-        total_pc=request.POST['total_pc'],
-        owner_id=user.id
-    )
+    character = Character.objects.filter(first_name=request.POST['first_name']).filter(last_name=request.POST['last_name']).first()
+    if character is None:
+        character = Character.objects.create(
+            first_name=request.POST['first_name'],
+            last_name=request.POST['last_name'],
+            nickname=request.POST['nickname'],
+            total_pc=request.POST['total_pc'],
+            owner_id=user.id
+        )
     for advantage_id in request.POST.getlist('advantages[]'):
         print(Advantage.objects.get(id=advantage_id))
         character.advantages.add(Advantage.objects.get(id=advantage_id))
@@ -107,9 +109,13 @@ def save_character(request):
 
 class AttributeAdvantageSerializer(rserializers.ModelSerializer):
     attribute_name = rserializers.SerializerMethodField()
+    attribute_id = rserializers.SerializerMethodField()
 
     def get_attribute_name(self, obj):
         return obj.attribute.name
+
+    def get_attribute_id(self, obj):
+        return obj.attribute.id
 
     class Meta:
         model = AttributeAdvantage

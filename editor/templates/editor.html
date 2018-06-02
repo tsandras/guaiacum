@@ -22,7 +22,7 @@
         </div>
     </div>
     <div id="save" class="box">
-        <div class="box-head">
+        <div class="box-head pointer">
             SAUVEGARDER
         </div>
     </div>
@@ -36,7 +36,9 @@
             <div class="box-body">
                 {% for attribute_advantage in advantage.attribute_advantages %}
                 <div class="attribute">
-                <span class="attribute-name">{{ attribute_advantage.attribute_name }}</span> : <span class="attribute-value>">{{ attribute_advantage.bonus }}</span>
+                <span class="attribute-name" data-id="{{ attribute_advantage.attribute_id }}">{{ attribute_advantage.attribute_name }}</span> :
+                    <span class="attribute-value">{{ attribute_advantage.bonus }}</span>
+                    (<span class="attribute-max">{{ attribute_advantage.max }}</span>)
                 </div>
                 {% endfor %}
             </div>
