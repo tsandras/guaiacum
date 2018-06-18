@@ -73,6 +73,7 @@ def attributes_con(request):
     return HttpResponse(html)
 
 
+@xframe_options_exempt
 def page(request, page_id):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -89,6 +90,7 @@ def page(request, page_id):
     return HttpResponse(html)
 
 
+@xframe_options_exempt
 def pages(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
