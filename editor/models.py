@@ -106,7 +106,7 @@ class Character(models.Model):
             attributes_advantages = AttributeAdvantage.objects.filter(advantage_id=advantage.id)
             for attribute_advantage in attributes_advantages:
                 attributes.append({
-                    'name': attribute_advantage.attribute_name,
+                    'name': attribute_advantage.attribute.name,
                      'bonus': attribute_advantage.bonus,
                      'max': attribute_advantage.max
 

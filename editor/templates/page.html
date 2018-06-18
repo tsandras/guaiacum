@@ -1,10 +1,6 @@
-{% extends "base.html" %}
-
-{% block content %}
 <br>
 <b>{{ page.name }}</b><br><br>
 {% for section in sections %}
-    <b>{section.name</b><br>
+    <b>{{section.name}}</b><br>
     <p>{{ section.description }}</p>
 {% endfor %}
-{% endblock content %}

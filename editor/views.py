@@ -53,6 +53,8 @@ def editor(request, character_id):
 
 @xframe_options_exempt
 def attributes_phy(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('attribute.html')
     lab = Label.objects.filter(name='Physique').first()
     attributes = Attribute.objects.filter(labels__in=[lab])
@@ -62,6 +64,8 @@ def attributes_phy(request):
 
 @xframe_options_exempt
 def attributes_con(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('attribute.html')
     lab = Label.objects.filter(name='Connaissance').first()
     attributes = Attribute.objects.filter(labels__in=[lab])
@@ -70,15 +74,40 @@ def attributes_con(request):
 
 
 def page(request, page_id):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    user = request.user
     t = get_template('page.html')
     page = Page.objects.get(id=page_id)
-    user = request.user
     user_profile = UserProfile.objects.filter(user=user).first()
     if user_profile is None or page is None:
         return redirect('home')
+
     character = user_profile.character
     sections = character.get_sections_for(page)
     html = t.render({'character': character, 'sections': sections, 'page': page})
+    return HttpResponse(html)
+
+
+def pages(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    t = get_template('pages.html')
+    user = request.user
+    user_profile = UserProfile.objects.filter(user=user).first()
+    if user_profile is None:
+        return redirect('home')
+
+    character = user_profile.character
+    selected_pages = []
+    pages = Page.objects.all()
+    for page in pages:
+        sections = character.get_sections_for(page)
+        if len(sections) > 0:
+            selected_pages.append(page)
+
+    html = t.render({'character': character, 'pages': selected_pages})
     return HttpResponse(html)
 
 

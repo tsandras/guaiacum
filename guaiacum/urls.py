@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^editor_new/', views.editor_new, name='editor_new'),
     url(r'^editor/(?P<character_id>\d+)/$', views.editor, name='editor'),
     url(r'^page/(?P<page_id>\d+)/$', views.page, name='page'),
+    url(r'^pages/$', views.pages, name='pages'),
     url(r'^home/', views.home, name='home'),
     url(r'^attributes_phy/', views.attributes_phy, name='attributes_con'),
     url(r'^attributes_con/', views.attributes_con, name='attributes_phy'),

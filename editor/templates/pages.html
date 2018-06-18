@@ -1,0 +1,5 @@
+<b>{{ page.name }}</b><br>
+{% for page in pages %}
+<a href="/page/{{ page.id }}">{{ page.name }}</a>
+<br>
+{% endfor %}
