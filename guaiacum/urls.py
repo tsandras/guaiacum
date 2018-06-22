@@ -30,8 +30,11 @@ urlpatterns = [
     url(r'^attributes_phy/', views.attributes_phy, name='attributes_con'),
     url(r'^attributes_con/', views.attributes_con, name='attributes_phy'),
     url(r'^advantages/', views.advantages, name='advantages'),
+    url(r'^attributes/', views.attributes, name='attributes'),
     url(r'^advantage/(?P<advantage_id>\d+)/$', views.advantage, name='advantage'),
+    url(r'^attribute/(?P<attribute_id>\d+)/$', views.attribute, name='attribute'),
     url(r'^save_character/', views.save_character, name='save_character'),
+    url(r'^delete_advantage/', views.delete_advantage, name='delete_advantage'),
     url('^', include('django.contrib.auth.urls')),
     url(r'^$',  TemplateView.as_view(template_name="about.html")),
 ]

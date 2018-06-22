@@ -97,6 +97,7 @@ class Character(models.Model):
     nickname = models.CharField(max_length=100, db_index=True)
     owner = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, db_index=True, related_name='characters')
     advantages = models.ManyToManyField(Advantage, blank=True, related_name='advantages_characters')
+    attribute_bonuses = models.ManyToManyField(Attribute, blank=True, related_name='attribute_bonuses_characters')
     total_pc = models.IntegerField(default=300)
     audio = models.FileField(upload_to='media/audio/characters/', blank=True, null=True)
 
@@ -130,6 +131,12 @@ class Character(models.Model):
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
+
+
+class AttributeCharacter(models.Model):
+    attribute = models.ForeignKey(Attribute)
+    character = models.ForeignKey(Character)
+    bonus = models.IntegerField(default=1)
 
 
 class UserProfile(models.Model):

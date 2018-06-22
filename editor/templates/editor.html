@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% load staticfiles%}
 <select id="add-advantages" style="width:260px"></select>
+<select id="add-attributes" style="width:260px"></select>
 <div id="right-part" style="float: right;">
     <div id="attributes" class="box">
         <div class="box-head">
@@ -30,8 +32,8 @@
 <div id="advantages">
     {% for advantage in advantages %}
         <div class="box advantage">
-            <div class="box-head advantage-name" data-id="{{ advantage.id }}">
-                {{ advantage.name }}
+            <div class="box-head advantage-name" data-id="{{ advantage.id }}" data-character_id="{{ character.id }}">
+                {{ advantage.name }} <img class="pointer delete" src="{% static "deletered.png" %}" style="width: 12px; float: right;">
             </div>
             <div class="box-body">
                 {% for attribute_advantage in advantage.attribute_advantages %}
@@ -45,10 +47,19 @@
         </div>
     {% endfor %}
 </div>
+<div style="display: none;">
+    {% for attribute in attributes %}
+        <input id="fattr{{ attribute.attribute_id }}" class="flat_attribute" data-id="{{ attribute.attribute_id }}" value="{{ attribute.bonus }}">
+    {% endfor %}
+    <span id="delete-template"><img class="pointer delete" src="{% static "deletered.png" %}" style="width: 12px; float: right;"></span>
+    <input id="character_id" value="{{ character.id }}">
+</div>
 <script>
     $(document).ready(function() {
-        var editor = new Editor('add-advantages', 'http://localhost:8001')
+        var editor = new Editor('add-advantages', 'add-attributes', '{{ http_host }}')
         editor.handleAddAdvantages()
+        editor.handleAddAttributes()
+        editor.handleDeleteAdvantage()
     })
 </script>
 {% endblock content %}
