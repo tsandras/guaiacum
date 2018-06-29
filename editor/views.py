@@ -72,6 +72,27 @@ def attributes_phy(request):
     html = t.render({'attributes': attributes})
     return HttpResponse(html)
 
+@xframe_options_exempt
+def attributes_men(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    t = get_template('attribute.html')
+    lab = Label.objects.filter(name='Mental').first()
+    attributes = Attribute.objects.filter(labels__in=[lab])
+    html = t.render({'attributes': attributes})
+    return HttpResponse(html)
+
+
+@xframe_options_exempt
+def attributes_mag(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    t = get_template('attribute.html')
+    lab = Label.objects.filter(name='Magique').first()
+    attributes = Attribute.objects.filter(labels__in=[lab])
+    html = t.render({'attributes': attributes})
+    return HttpResponse(html)
+
 
 @xframe_options_exempt
 def attributes_con(request):
@@ -79,6 +100,28 @@ def attributes_con(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('attribute.html')
     lab = Label.objects.filter(name='Connaissance').first()
+    attributes = Attribute.objects.filter(labels__in=[lab])
+    html = t.render({'attributes': attributes})
+    return HttpResponse(html)
+
+
+@xframe_options_exempt
+def attributes_com(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    t = get_template('attribute.html')
+    lab = Label.objects.filter(name='Compétence').first()
+    attributes = Attribute.objects.filter(labels__in=[lab])
+    html = t.render({'attributes': attributes})
+    return HttpResponse(html)
+
+
+@xframe_options_exempt
+def attributes_his(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    t = get_template('attribute.html')
+    lab = Label.objects.filter(name='Historique').first()
     attributes = Attribute.objects.filter(labels__in=[lab])
     html = t.render({'attributes': attributes})
     return HttpResponse(html)

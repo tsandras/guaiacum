@@ -89,6 +89,8 @@ class CharactereAdmin(admin.ModelAdmin):
     list_display_links = ('first_name',)
     filter_horizontal = ('advantages',)
     ordering = ('first_name',)
+    fields = ('first_name', 'last_name', 'nickname', 'owner', 'advantages', 'attribute_bonuses', 'total_pc', 'drawing', 'audio', 'image_tag')
+    readonly_fields = ('image_tag',)
 
 
 class UserProfileAdmin(admin.ModelAdmin):

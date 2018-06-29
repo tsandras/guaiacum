@@ -15,8 +15,8 @@ class Page(models.Model):
     description = models.TextField(blank=True)
     topics = models.ManyToManyField(Topic, blank=True, related_name='pages')
     quote = models.TextField(blank=True)
-    drawing = models.FileField(upload_to='media/drawing/pages/', blank=True, null=True)
-    audio = models.FileField(upload_to='media/audio/pages/', blank=True, null=True)
+    drawing = models.ImageField(upload_to='drawing/pages/', blank=True, null=True)
+    audio = models.FileField(upload_to='audio/pages/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -29,4 +29,4 @@ class Section(models.Model):
     attribute = models.ForeignKey(Attribute, blank=True, null=True, related_name='sections')
     level = models.IntegerField(default=1)
     quote = models.TextField(blank=True)
-    drawing = models.FileField(upload_to='media/drawing/sections/', blank=True, null=True)
+    drawing = models.FileField(upload_to='drawing/sections/', blank=True, null=True)

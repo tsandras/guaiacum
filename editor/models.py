@@ -99,7 +99,8 @@ class Character(models.Model):
     advantages = models.ManyToManyField(Advantage, blank=True, related_name='advantages_characters')
     attribute_bonuses = models.ManyToManyField(Attribute, blank=True, related_name='attribute_bonuses_characters')
     total_pc = models.IntegerField(default=300)
-    audio = models.FileField(upload_to='media/audio/characters/', blank=True, null=True)
+    drawing = models.ImageField(upload_to='drawing/characters/', blank=True, null=True)
+    audio = models.FileField(upload_to='audio/characters/', blank=True, null=True)
 
     def get_dict_of_attributes(self):
         attributes = []
@@ -128,6 +129,12 @@ class Character(models.Model):
                 if attributes[section.attribute.name] >= section.level:
                     sections.append(section)
         return sections
+
+    def image_tag(self):
+        return u'<img src="%s" />' % self.drawing.url
+
+    image_tag.short_description = 'Image'
+    image_tag.allow_tags = True
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name

@@ -7,6 +7,7 @@ Django==1.11.7
 django-registration==2.4.1
 djangorestframework==3.8.2
 idna==2.7
+Pillow==5.1.0
 psycopg2==2.7.4
 psycopg2-binary==2.7.4
 pytz==2018.4
