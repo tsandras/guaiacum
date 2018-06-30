@@ -57,7 +57,7 @@ class Advantage(models.Model):
     bonuses = models.ManyToManyField(
         Attribute, blank=True, through='AttributeAdvantage', related_name='advantages', symmetrical=False
     )
-    conditions = models.ManyToManyField('self', blank=True, related_name='are_required' , symmetrical=False)
+    conditions = models.ManyToManyField('self', blank=True, related_name='are_required', symmetrical=False)
 
     def __str__(self):
         return self.name

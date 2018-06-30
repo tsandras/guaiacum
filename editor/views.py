@@ -29,7 +29,7 @@ def editor_new(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('editor.html')
     logged_user = request.user
-    html = t.render({'user': logged_user})
+    html = t.render({'user': logged_user, 'http_host': request.META['HTTP_HOST']})
     return HttpResponse(html)
 
 
