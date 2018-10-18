@@ -1,6 +1,36 @@
-<br>
-<b>{{ page.name }}</b><br><br>
-{% for section in sections %}
-    <b>{{section.name}}</b><br>
-    <p>{{ section.description }}</p>
-{% endfor %}
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+</head>
+<div class="container" style="font-family:Consolas,"Andale Mono WT","Andale Mono","Bitstream Vera Sans Mono","Nimbus Mono L",Monaco;">
+    <div class="row">
+        <div class="col-md-12" align="center" style="font-size: 22px;">
+            {{ page.name }}
+            {% for topic in page.topics.all %}
+                    <span class="badge badge-dark">{{ topic.name }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% for section in sections %}
+    <div class="row">
+        <div class="col-md-12" align="center" style="font-size: 18px;">
+            {{ section.name }}
+        </div>
+        <div class="col-md-9">
+            <div>
+                {% for label in section.attribute.get_labels %}
+                    <span class="badge badge-info">{{ label }}</span>
+                {% endfor %}
+                <span class="badge badge-success">{{ section.attribute.name }} {{ section.level }}</span>
+            </div>
+            <br>
+            <div class="alert alert-primary">{{ section.description }}</div>
+        </div>
+        <div class="col-md-3">
+            <blockquote class="blockquote">
+                <p><em>{{ section.quote }}</em></p>
+            </blockquote>
+        </div>
+    </div>
+    {% endfor %}
+</div>

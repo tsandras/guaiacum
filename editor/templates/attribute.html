@@ -5,37 +5,35 @@
 
 <div class="container" style="font-family:Consolas,"Andale Mono WT","Andale Mono","Bitstream Vera Sans Mono","Nimbus Mono L",Monaco;">
 {% for attribute in attributes %}
-    <div style="border-style: solid; padding: 5px;">
-        <div class="row">
-            <div class="col-md-12" align="center" style="font-size: 22px;">
-                {{ attribute.name }}
-            </div>
+    <div class="row">
+        <div class="col-md-12" align="center" style="font-size: 22px;">
+            {{ attribute.name }}
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div>
-                    <span class="badge badge-{{ attribute.get_label_of_tier }}">Tier {{ attribute.get_roman_number_of_tier }}</span> <span class="badge badge-primary">{{ attribute.cost }}PC</span>
-                    {% for label in attribute.get_labels %}
-                        <span class="badge badge-dark">{{ label }}</span>
-                    {% endfor %}
-                </div>
-                <div>
-                    {% for c in attribute.get_conditions %}
-                        <span class="badge badge-light">{{ c }}</span>
-                    {% endfor %}
-                </div>
-                <br>
-                <div class="alert alert-primary">{{ attribute.description }}</div>
-            </div>
-            <div class="col-md-6">
-                <table class="table table-striped" style="font-size: 12px;">
-                {% for level in attribute.levels.all %}
-                    <tr>
-                    <td>{{ level.level }}</td><td>{{ level.name }}</td><td>{{ level.description }}</td>
-                    </tr>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div>
+                <span class="badge badge-{{ attribute.get_label_of_tier }}">Tier {{ attribute.get_roman_number_of_tier }}</span> <span class="badge badge-primary">{{ attribute.cost }}PC</span>
+                {% for label in attribute.get_labels %}
+                    <span class="badge badge-dark">{{ label }}</span>
                 {% endfor %}
-                </table>
             </div>
+            <div>
+                {% for c in attribute.get_conditions %}
+                    <span class="badge badge-light">{{ c }}</span>
+                {% endfor %}
+            </div>
+            <br>
+            <div class="alert alert-primary">{{ attribute.description }}</div>
+        </div>
+        <div class="col-md-6">
+            <table class="table table-striped" style="font-size: 12px;">
+            {% for level in attribute.levels.all %}
+                <tr>
+                <td>{{ level.level }}</td><td>{{ level.name }}</td><td>{{ level.description }}</td>
+                </tr>
+            {% endfor %}
+            </table>
         </div>
     </div>
     <br>

@@ -1,5 +1,28 @@
-<b>{{ page.name }}</b><br>
-{% for page in pages %}
-<a href="/page/{{ page.id }}">{{ page.name }}</a>
-<br>
-{% endfor %}
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+</head>
+<div class="container" style="font-family:Consolas,"Andale Mono WT","Andale Mono","Bitstream Vera Sans Mono","Nimbus Mono L",Monaco;">
+    <br>
+    {% for page in pages %}
+        {% if forloop.counter0|divisibleby:2 %}
+            <div class="row">
+         {% endif %}
+            <div class="col-md-6">
+                {% if page.max_level == 1 %}
+                    <a class="btn btn-light btn-sm" href="/page/{{ page.id }}">{{ page.name }}</a>
+                {% elif page.max_level == 2 %}
+                    <a class="btn btn-info btn-sm" href="/page/{{ page.id }}">{{ page.name }}</a>
+                {% elif page.max_level == 3 %}
+                    <a class="btn btn-primary btn-sm" href="/page/{{ page.id }}">{{ page.name }}</a>
+                {% elif page.max_level == 4 %}
+                    <a class="btn btn-warning btn-sm" href="/page/{{ page.id }}">{{ page.name }}</a>
+                {% else %}
+                    <a class="btn btn-danger btn-sm" href="/page/{{ page.id }}">{{ page.name }}</a>
+                {% endif %}
+            </div>
+        {% if not forloop.counter0|divisibleby:2 %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

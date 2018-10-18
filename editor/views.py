@@ -161,6 +161,7 @@ def pages(request):
     for page in pages:
         sections = character.get_sections_for(page)
         if len(sections) > 0:
+            page.max_level = len(sections)
             selected_pages.append(page)
 
     html = t.render({'character': character, 'pages': selected_pages})
