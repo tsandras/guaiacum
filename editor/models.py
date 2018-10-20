@@ -161,7 +161,7 @@ class Character(models.Model):
             if section.attribute.name in attributes.keys():
                 if attributes[section.attribute.name] >= section.level:
                     sections.append(section)
-        return sections
+        return sections.sort(key=lambda x: x.id, reverse=True)
 
     def image_tag(self):
         return u'<img src="%s" />' % self.drawing.url
