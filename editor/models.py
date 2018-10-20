@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import operator
+
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -161,7 +163,8 @@ class Character(models.Model):
             if section.attribute.name in attributes.keys():
                 if attributes[section.attribute.name] >= section.level:
                     sections.append(section)
-        return sections.sort(key=lambda x: x.id, reverse=True)
+        sections.sort(key=operator.attrgetter('order'))
+        return sections
 
     def image_tag(self):
         return u'<img src="%s" />' % self.drawing.url

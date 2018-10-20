@@ -28,5 +28,6 @@ class Section(models.Model):
     page = models.ForeignKey(Page, blank=True, null=True, related_name='sections')
     attribute = models.ForeignKey(Attribute, blank=True, null=True, related_name='sections')
     level = models.IntegerField(default=1)
+    order = models.IntegerField(default=1)
     quote = models.TextField(blank=True)
     drawing = models.FileField(upload_to='drawing/sections/', blank=True, null=True)
