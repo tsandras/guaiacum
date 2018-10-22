@@ -59,7 +59,10 @@ class Attribute(models.Model):
         out = []
         for c in self.conditions.all():
             attribute_dependency = AttributeDependency.objects.filter(attribute=self, condition=c).first()
-            out.append(c.name +' ('+ attribute_dependency.level+')')
+            if attribute_dependency:
+                out.append(c.name +' ('+ attribute_dependency.level+')')
+            else:
+                out.append(c.name)
         return out
 
     def __str__(self):
