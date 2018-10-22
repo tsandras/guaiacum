@@ -58,7 +58,8 @@ class Attribute(models.Model):
     def get_conditions(self):
         out = []
         for c in self.conditions.all():
-            out.append(c.name +' ('+ c.level+')')
+            attribute_dependency = AttributeDependency.objects.filter(attribute=self, condition=c).first()
+            out.append(c.name +' ('+ attribute_dependency.level+')')
         return out
 
     def __str__(self):
