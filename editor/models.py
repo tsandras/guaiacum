@@ -58,9 +58,9 @@ class Attribute(models.Model):
     def get_conditions(self):
         out = []
         for c in self.conditions.all():
-            attribute_dependency = AttributeDependency.objects.filter(attribute=self, condition=c).first()
+            attribute_dependency = AttributeDependency.objects.filter(attribute=c).filter(condition=self).first()
             if attribute_dependency:
-                out.append(c.name +' ('+ attribute_dependency.level+')')
+                out.append("%s %s" % (c.name, attribute_dependency.level))
             else:
                 out.append(c.name)
         return out
@@ -76,6 +76,9 @@ class AttributeDependency(models.Model):
     condition = models.ForeignKey(Attribute, related_name='attribute')
     attribute = models.ForeignKey(Attribute, related_name='condition')
     level = models.IntegerField(default=1)
+
+    def __str__(self):
+        return "%s, %s: %s" % (self.attribute.name, self.condition.name, self.level)
 
 
 class AttributeLevel(models.Model):
