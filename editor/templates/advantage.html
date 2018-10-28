@@ -1,0 +1,39 @@
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+</head>
+
+<div class="container" style="font-family:Consolas,"Andale Mono WT","Andale Mono","Bitstream Vera Sans Mono","Nimbus Mono L",Monaco;">
+{% for advantage in advantages %}
+    <div class="row">
+        <div class="col-md-12" align="center" style="font-size: 22px;">
+            {{ advantage.name }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div>
+                <span class="badge badge-{{ advantage.get_label_of_tier }}">Tier {{ advantage.get_roman_number_of_tier }}</span> <span class="badge badge-primary">{{ advantage.cost }}PC</span>
+            </div>
+            <div>
+                <span>Conditions :</span>
+                {% for c in attribute.conditions.all %}
+                    <span class="badge badge-light">{{ c.name }}</span>
+                {% endfor %}
+            </div>
+            <br>
+            <div class="alert alert-primary">{{ advantage.description }}</div>
+        </div>
+        <div class="col-md-6">
+            <table class="table table-striped" style="font-size: 12px;">
+            {% for bonus in advantage.get_bonuses %}
+                <tr>
+                <td>{{ bonus }}</td><td></td><td></td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+    <br>
+{% endfor %}
+</div>

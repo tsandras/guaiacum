@@ -68,7 +68,7 @@ def attributes_phy(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('attribute.html')
     lab = Label.objects.filter(name='Physique').first()
-    attributes = Attribute.objects.filter(labels__in=[lab])
+    attributes = Attribute.objects.filter(labels__in=[lab]).order_by('name')
     html = t.render({'attributes': attributes})
     return HttpResponse(html)
 
@@ -78,7 +78,7 @@ def attributes_men(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('attribute.html')
     lab = Label.objects.filter(name='Mental').first()
-    attributes = Attribute.objects.filter(labels__in=[lab])
+    attributes = Attribute.objects.filter(labels__in=[lab]).order_by('name')
     html = t.render({'attributes': attributes})
     return HttpResponse(html)
 
@@ -89,7 +89,7 @@ def attributes_mag(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('attribute.html')
     lab = Label.objects.filter(name='Magique').first()
-    attributes = Attribute.objects.filter(labels__in=[lab])
+    attributes = Attribute.objects.filter(labels__in=[lab]).order_by('name')
     html = t.render({'attributes': attributes})
     return HttpResponse(html)
 
@@ -100,7 +100,7 @@ def attributes_con(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('attribute.html')
     lab = Label.objects.filter(name='Connaissance').first()
-    attributes = Attribute.objects.filter(labels__in=[lab])
+    attributes = Attribute.objects.filter(labels__in=[lab]).order_by('name')
     html = t.render({'attributes': attributes})
     return HttpResponse(html)
 
@@ -111,7 +111,7 @@ def attributes_com(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('attribute.html')
     lab = Label.objects.filter(name='Compétence').first()
-    attributes = Attribute.objects.filter(labels__in=[lab])
+    attributes = Attribute.objects.filter(labels__in=[lab]).order_by('name')
     html = t.render({'attributes': attributes})
     return HttpResponse(html)
 
@@ -122,7 +122,7 @@ def attributes_his(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     t = get_template('attribute.html')
     lab = Label.objects.filter(name='Historique').first()
-    attributes = Attribute.objects.filter(labels__in=[lab])
+    attributes = Attribute.objects.filter(labels__in=[lab]).order_by('name')
     html = t.render({'attributes': attributes})
     return HttpResponse(html)
 
@@ -172,6 +172,25 @@ def advantages(request):
     advantages = Advantage.objects.filter(name__iregex=r'^.*' + request.GET['q'] + '.*$')
     response_data = serializers.serialize('json', advantages)
     return HttpResponse(response_data, content_type="application/json")
+
+@xframe_options_exempt
+def wiki_advantages(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    t = get_template('advantage.html')
+    advantages = Advantage.objects.filter(cost__gte=0).order_by('name')
+    html = t.render({'advantages': advantages})
+    return HttpResponse(html)
+
+
+@xframe_options_exempt
+def wiki_disadvantages(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    t = get_template('advantage.html')
+    disadvantages = Advantage.objects.filter(cost__lte=0).order_by('name')
+    html = t.render({'advantages': disadvantages})
+    return HttpResponse(html)
 
 
 def attributes(request):

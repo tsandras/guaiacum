@@ -7,6 +7,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from django.db.models import Max
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
 
 
 class Label(models.Model):
@@ -104,19 +106,54 @@ class Advantage(models.Model):
     def __str__(self):
         return self.name
 
+    def get_roman_number_of_tier(self):
+        list_conversion = {0: "?", 1: "I", 2: "II", 3: "III", 4: "IV"}
+        return list_conversion[self.tier]
+
+    def get_label_of_tier(self):
+        if self.tier == 1:
+            return "secondary"
+        if self.tier == 2:
+            return "info"
+        if self.tier == 3:
+            return "warning"
+        if self.tier == 4:
+            return "danger"
+        return "secondary"
+
+    def get_bonuses(self):
+        out = []
+        attribute_advantages = AttributeAdvantage.objects.filter(advantage=self)
+        for attribute_advantage in attribute_advantages.all():
+            if attribute_advantage and attribute_advantage.attribute and attribute_advantage.become is None:
+                out.append("%s +%s (%s)" % (attribute_advantage.attribute.name, attribute_advantage.bonus, attribute_advantage.max))
+            elif attribute_advantage.become is not None:
+                out.append("%s => %s" % (attribute_advantage.attribute.name, attribute_advantage.become))
+            elif attribute_advantage.cost_limit:
+                out.append("%s (max %s) +%s (%s)" % (attribute_advantage.label_limit, attribute_advantage.cost_limit, attribute_advantage.bonus, attribute_advantage.max))
+            else:
+                out.append("???")
+        return out
+
     def save(self, *args, **kwargs):
         self.tier = 0
         self.cost = 0
-        super().save(*args, **kwargs)
+
+        attribute_advantages = AttributeAdvantage.objects.filter(advantage=self)
+        for attribute_advantage in attribute_advantages.all():
+            if attribute_advantage and attribute_advantage.attribute and attribute_advantage.become is None:
+                self.cost += attribute_advantage.attribute.cost * attribute_advantage.bonus * attribute_advantage.max
+            elif attribute_advantage.become is not None:
+                self.cost += attribute_advantage.attribute.cost * (attribute_advantage.become - 5) * 2
+            elif attribute_advantage.cost_limit:
+                self.cost += attribute_advantage.cost_limit * attribute_advantage.bonus * attribute_advantage.max
+            else:
+                self.cost += 0
+
         if self.bonuses.all().aggregate(Max('tier'))['tier__max'] is not None:
             self.tier = self.bonuses.all().aggregate(Max('tier'))['tier__max']
         else:
             self.tier = 0
-        if self.bonuses.all() is not None:
-            for attribute_advantage in AttributeAdvantage.objects.filter(advantage_id=self.id):
-                self.cost += attribute_advantage.attribute.cost * attribute_advantage.bonus * attribute_advantage.max
-        else:
-            self.cost = 0
         super().save(*args, **kwargs)
 
 
