@@ -28,7 +28,7 @@ class Attribute(models.Model):
     )
     description = models.TextField(blank=True)
     reference = models.ForeignKey('self', blank=True, null=True, related_name='related_attributes')
-    labels = models.ManyToManyField(Label, blank=True, related_name='label_attributes')
+    label = models.ForeignKey(Label, null=True, blank=True, related_name='label_attributes')
 
     def get_roman_number_of_tier(self):
         list_conversion = {1: "I", 2: "II", 3: "III", 4: "IV"}
@@ -44,18 +44,6 @@ class Attribute(models.Model):
         if self.tier == 4:
             return "danger"
         return "secondary"
-
-    def get_short_labels(self):
-        out = []
-        for l in self.labels.all():
-            out.append(l.short)
-        return out
-
-    def get_labels(self):
-        out = []
-        for l in self.labels.all():
-            out.append(l.name)
-        return out
 
     def get_conditions(self):
         out = []

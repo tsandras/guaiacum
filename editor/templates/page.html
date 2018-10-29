@@ -23,9 +23,7 @@
         </div>
         <div class="col-md-9">
             <div>
-                {% for label in section.attribute.get_labels %}
-                    <span class="badge badge-info">{{ label }}</span>
-                {% endfor %}
+                <span class="badge badge-info">{{ section.attribute.label }}</span>
                 <span class="badge badge-success">{{ section.attribute.name }} {{ section.level }}</span>
             </div>
             <br>

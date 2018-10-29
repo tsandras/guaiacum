@@ -40,15 +40,12 @@ class AttributeAdmin(admin.ModelAdmin):
         'tier',
         'cost',
         'get_levels',
-        'get_labels'
+        'label'
     )
     list_display_links = ('name',)
     ordering = ('name',)
-    filter_horizontal = ('labels',)
+    list_filter = ("label", "tier")
     inlines = [AttributeDependencyInline, AttributeLevelInline]
-
-    def get_labels(self, obj):
-        return ", ".join([p.name for p in obj.labels.all()])
 
     def get_levels(self, obj):
         return ", ".join([str(p.level) for p in obj.levels.all().order_by('level')])

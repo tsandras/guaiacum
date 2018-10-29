@@ -14,9 +14,7 @@
         <div class="col-md-6">
             <div>
                 <span class="badge badge-{{ attribute.get_label_of_tier }}">Tier {{ attribute.get_roman_number_of_tier }}</span> <span class="badge badge-primary">{{ attribute.cost }}PC</span>
-                {% for label in attribute.get_labels %}
-                    <span class="badge badge-dark">{{ label }}</span>
-                {% endfor %}
+                <span class="badge badge-dark">{{ attribute.label }}</span>
             </div>
             <div>
                 {% for c in attribute.get_conditions %}
