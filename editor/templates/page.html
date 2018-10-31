@@ -13,7 +13,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            {{ page.description }}
+            {{ page.description|linebreaks }}
         </div>
     </div>
     {% for section in sections %}
@@ -27,11 +27,11 @@
                 <span class="badge badge-success">{{ section.attribute.name }} {{ section.level }}</span>
             </div>
             <br>
-            <div class="alert alert-primary">{{ section.description }}</div>
+            <div class="alert alert-primary">{{ section.description|linebreaks }}</div>
         </div>
         <div class="col-md-3">
             <blockquote class="blockquote">
-                <p><em>{{ section.quote }}</em></p>
+                <p><em>{{ section.quote|linebreaks }}</em></p>
             </blockquote>
         </div>
     </div>
